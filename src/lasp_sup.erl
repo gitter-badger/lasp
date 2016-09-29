@@ -149,7 +149,10 @@ init(_Args) ->
     %% Setup the game tournament example, if necessary.
     TournamentSpecs = game_tournament_child_specs(),
 
-    Children = Children0 ++ AdSpecs ++ TournamentSpecs,
+    %% Setup simple example, if necessary.
+    SimpleSpecs = simple_child_specs(),
+
+    Children = Children0 ++ AdSpecs ++ TournamentSpecs ++ SimpleSpecs,
 
     %% Configure defaults.
     configure_defaults(),
@@ -262,6 +265,18 @@ configure_defaults() ->
                                                PartitionProbabilityDefault),
     lasp_config:set(partition_probability, PartitionProbability),
 
+    EventNumberDefault = 4800,
+    EventNumber = application:get_env(?APP,
+                                      max_events,
+                                      EventNumberDefault),
+    lasp_config:set(max_events, EventNumber),
+
+    EventVelocityDefault = list_to_integer(os:getenv("EVENT_VELOCITY", "1")),
+    EventVelocity = application:get_env(?APP,
+                                        event_velocity,
+                                        EventVelocityDefault),
+    lasp_config:set(event_velocity, EventVelocity),
+
     %% Peer service.
     PeerService = application:get_env(plumtree,
                                       peer_service,
@@ -336,18 +351,6 @@ advertisement_counter_child_specs() ->
                                           AdClientDefault),
     lasp_config:set(ad_counter_simulation_client, AdClientEnabled),
     lager:info("AdClientEnabled: ~p", [AdClientEnabled]),
-
-    ImpressionNumberDefault = 4800,
-    ImpressionNumber = application:get_env(?APP,
-                                           max_impressions,
-                                           ImpressionNumberDefault),
-    lasp_config:set(max_impressions, ImpressionNumber),
-
-    ImpressionVelocityDefault = list_to_integer(os:getenv("IMPRESSION_VELOCITY", "1")),
-    ImpressionVelocity = application:get_env(?APP,
-                                             impression_velocity,
-                                             ImpressionVelocityDefault),
-    lasp_config:set(impression_velocity, ImpressionVelocity),
 
     ClientSpecs = case AdClientEnabled of
         true ->
@@ -441,6 +444,56 @@ game_tournament_child_specs() ->
             partisan_config:set(tag, server),
 
             [TournServer];
+        false ->
+            []
+    end,
+
+    ClientSpecs ++ ServerSpecs.
+
+%% @private
+simple_child_specs() ->
+    %% Figure out who is acting as the client.
+    SimpleClientDefault = list_to_atom(os:getenv("SIMPLE_SIM_CLIENT", "false")),
+    SimpleClientEnabled = application:get_env(?APP,
+                                          simple_simulation_client,
+                                          SimpleClientDefault),
+    lasp_config:set(simple_simulation_client, SimpleClientEnabled),
+    lager:info("SimpleClientEnabled: ~p", [SimpleClientEnabled]),
+
+    ClientSpecs = case SimpleClientEnabled of
+        true ->
+            SimpleClient = {lasp_simple_client,
+                                  {lasp_simple_client, start_link, []},
+                                   permanent, 5000, worker,
+                                   [lasp_simple_client]},
+
+            %% Configure proper partisan tag.
+            partisan_config:set(tag, client),
+
+            [SimpleClient];
+        false ->
+            []
+    end,
+
+    %% Figure out who is acting as the server.
+    SimpleServerDefault = list_to_atom(os:getenv("SIMPLE_SIM_SERVER", "false")),
+    SimpleServerEnabled = application:get_env(?APP,
+                                             simple_simulation_server,
+                                             SimpleServerDefault),
+    lasp_config:set(simple_simulation_server, SimpleServerEnabled),
+    lager:info("SimpleServerEnabled: ~p", [SimpleServerEnabled]),
+
+    ServerSpecs = case SimpleServerEnabled of
+        true ->
+            SimpleServer = {lasp_simple_server,
+                           {lasp_simple_server, start_link, []},
+                            permanent, 5000, worker,
+                            [lasp_simple_server]},
+
+            %% Configure proper partisan tag.
+            partisan_config:set(tag, server),
+
+            [SimpleServer];
         false ->
             []
     end,

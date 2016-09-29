@@ -252,8 +252,8 @@ launch_triggers(AdList, Actor) ->
 %% @private
 trigger(#ad{counter=CounterId} = Ad, Actor) ->
     %% Blocking threshold read for max advertisement impressions.
-    MaxImpressions = lasp_config:get(max_impressions,
-                                     ?MAX_IMPRESSIONS_DEFAULT),
+    MaxImpressions = lasp_config:get(max_events,
+                                     ?MAX_EVENTS_DEFAULT),
 
     EnforceFun = fun() ->
             lager:info("Threshold for ~p reached; disabling!", [Ad]),
@@ -294,8 +294,8 @@ compute_overcounting(AdList) ->
     OvercountingSum = lists:foldl(
         fun(#ad{counter=CounterId} = _Ad, Acc) ->
             {ok, Value} = lasp:query(CounterId),
-            MaxImpressions = lasp_config:get(max_impressions,
-                                             ?MAX_IMPRESSIONS_DEFAULT),
+            MaxImpressions = lasp_config:get(max_events,
+                                             ?MAX_EVENTS_DEFAULT),
             Overcounting = Value - MaxImpressions,
             OvercountingPercentage = (Overcounting * 100) / MaxImpressions,
             Acc + OvercountingPercentage

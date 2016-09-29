@@ -218,8 +218,8 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @private
 schedule_impression() ->
-    ImpressionVelocity = lasp_config:get(impression_velocity, 1),
-    timer:send_after(round(?IMPRESSION_INTERVAL / ImpressionVelocity), view).
+    ImpressionVelocity = lasp_config:get(event_velocity, 1),
+    timer:send_after(round(?EVENT_INTERVAL / ImpressionVelocity), view).
 
 %% @private
 schedule_logging() ->
@@ -262,8 +262,8 @@ build_dag() ->
 %% @private
 trigger(#ad{counter=CounterId} = Ad, Actor) ->
     %% Blocking threshold read for max advertisement impressions.
-    MaxImpressions = lasp_config:get(max_impressions,
-                                     ?MAX_IMPRESSIONS_DEFAULT),
+    MaxImpressions = lasp_config:get(max_events,
+                                     ?MAX_EVENTS_DEFAULT),
 
     EnforceFun = fun() ->
             lager:info("Threshold for ~p reached; disabling!", [Ad]),

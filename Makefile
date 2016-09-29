@@ -40,7 +40,10 @@ eunit:
 ct:
 	${REBAR} as test ct --suite=lasp_SUITE
 
-simulations: client-server-ad-counter-simulation peer-to-peer-ad-counter-simulation ad-counter-overcounting ad-counter-partition-overcounting
+simulations: client-server-ad-counter-simulation peer-to-peer-ad-counter-simulation ad-counter-overcounting ad-counter-partition-overcounting simple
+
+simple:
+	${REBAR} as test ct --suite=lasp_simple_SUITE
 
 peer-to-peer-ad-counter-simulation:
 	${REBAR} as test ct --suite=lasp_peer_to_peer_advertisement_counter_SUITE

@@ -191,7 +191,8 @@ log_overcounting_and_convergence() ->
 compute_overcounting() ->
     {ok, Bag} = lasp:query(?SIMPLE_BAG),
     BagElements = sets:size(Bag),
-    MaxBagElements = ?MAX_BAG_ELEMENTS,
+    MaxBagElements = lasp_config:get(max_events,
+                                     ?MAX_EVENTS_DEFAULT),
     Overcounting = (BagElements * 100) / MaxBagElements,
     Overcounting.
 

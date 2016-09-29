@@ -162,7 +162,8 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @private
 schedule_event() ->
-    timer:send_after(1000, event). %% 1 second
+    ImpressionVelocity = lasp_config:get(event_velocity, 1),
+    timer:send_after(round(?EVENT_INTERVAL / ImpressionVelocity), view).
 
 %% @private
 schedule_logging() ->
@@ -185,6 +186,9 @@ build_dag() ->
 %% @private
 trigger(Actor) ->
     %% Blocking threshold read for max bag elements.
+    MaxElements = lasp_config:get(max_events,
+                                  ?MAX_EVENTS_DEFAULT),
+
     EnforceFun = fun() ->
             lager:info("Threshold reached; disabling!"),
 
@@ -193,7 +197,7 @@ trigger(Actor) ->
             schedule_check_simulation_end()
     end,
 
-    lasp:invariant(?SIMPLE_BAG, {cardinality, ?MAX_BAG_ELEMENTS}, EnforceFun),
+    lasp:invariant(?SIMPLE_BAG, {cardinality, MaxElements}, EnforceFun),
 
     ok.
 
