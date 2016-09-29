@@ -104,7 +104,12 @@ handle_info(event, #state{actor=Actor,
     lasp_marathon_simulations:log_message_queue_size("event"),
 
     {ok, DisabledAndLogs} = lasp:query(?SIM_STATUS_ID),
-    {Disabled, _Logs} = orddict:fetch(Actor, DisabledAndLogs),
+    Disabled = case orddict:find(Actor, DisabledAndLogs) of
+        {ok, {D, _L}} ->
+                D;
+        error ->
+                false
+    end,
 
     Events1 = case Disabled of
         false ->
@@ -163,7 +168,7 @@ code_change(_OldVsn, State, _Extra) ->
 %% @private
 schedule_event() ->
     ImpressionVelocity = lasp_config:get(event_velocity, 1),
-    timer:send_after(round(?EVENT_INTERVAL / ImpressionVelocity), view).
+    timer:send_after(round(?EVENT_INTERVAL / ImpressionVelocity), event).
 
 %% @private
 schedule_logging() ->

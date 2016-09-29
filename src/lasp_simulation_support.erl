@@ -174,10 +174,10 @@ start(_Case, _Config, Options) ->
                                 case Node of
                                     Server ->
                                         ok = rpc:call(Node, lasp_config, set,
-                                                      [simple_server, true]);
+                                                      [simple_simulation_server, true]);
                                     _ ->
                                         ok = rpc:call(Node, lasp_config, set,
-                                                      [simple_client, true])
+                                                      [simple_simulation_client, true])
                                 end
                         end,
 
