@@ -29,7 +29,7 @@ packageclean:
 
 check: test xref dialyzer
 
-test: ct eunit simulations
+test: ct eunit simulations simple
 
 lint:
 	${REBAR} as lint lint
