@@ -13,4 +13,4 @@ RUN cd /tmp && \
 CMD cd /opt && \
     git clone https://github.com/lasp-lang/lasp.git -b $LASP_BRANCH && \
     cd lasp/bin && \
-    ./transmission.sh
+    $LASP_BIN_SCRIPT
