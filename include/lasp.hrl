@@ -103,6 +103,9 @@
 -define(ENROLLABLE_GAMES, {<<"enrollable_games">>, ?SET_TYPE}).
 -define(ENROLLMENT_INTERVAL, 500).
 
+-define(SIMPLE_BAG, {<<"simple_bag">>, ?GSET_TYPE}).
+-define(MAX_BAG_ELEMENTS, 3600).
+
 -define(BOOLEAN_TYPE, boolean).
 -define(COUNTER_TYPE, gcounter).
 -define(GMAP_TYPE, gmap).
