@@ -3,6 +3,7 @@
 ENV_VARS=(
   ID
   LASP_BRANCH
+  LASP_BIN_SCRIPT
   DCOS
   TOKEN
   EVALUATION_PASSPHRASE
@@ -56,6 +57,7 @@ cat <<EOF > dcos-runner.json
   "ports": [0, 0],
   "env": {
     "LASP_BRANCH": "$LASP_BRANCH",
+    "LASP_BIN_SCRIPT": "$LASP_BIN_SCRIPT",
     "DCOS": "$DCOS",
     "TOKEN": "$TOKEN",
     "EVALUATION_PASSPHRASE": "$EVALUATION_PASSPHRASE",
