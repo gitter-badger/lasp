@@ -39,6 +39,16 @@ do
   fi
 done
 
+declare -A SIM_SERVERS_AND_CLIENTS
+SIM_SERVERS_AND_CLIENTS["ad_counter"]="AD_COUNTER_SIM_CLIENT AD_COUNTER_SIM_SERVER"
+SIM_SERVERS_AND_CLIENTS["game_tournament"]="TOURNAMENT_SIM_CLIENT TOURNAMENT_SIM_SERVER"
+SIM_SERVERS_AND_CLIENTS["simple"]="SIMPLE_SIM_CLIENT SIMPLE_SIM_SERVER"
+
+STR=${SIM_SERVERS_AND_CLIENTS["$SIMULATION"]}
+IFS=' ' read -a CONFIG <<< "$STR"
+SIM_CLIENT=${CONFIG[0]}
+SIM_SERVER=${CONFIG[1]}
+
 echo ">>> Beginning deployment!"
 
 if [ -e "$TIMESTAMP_FILE" ]; then
@@ -95,7 +105,7 @@ cat <<EOF > lasp-server.json
   "ports": [0, 0],
   "env": {
     "LASP_BRANCH": "$LASP_BRANCH",
-    "AD_COUNTER_SIM_SERVER": "true",
+    "$SIM_SERVER": "true",
     "DCOS": "$DCOS",
     "TOKEN": "$TOKEN",
     "EVALUATION_PASSPHRASE": "$EVALUATION_PASSPHRASE",
@@ -166,7 +176,7 @@ cat <<EOF > lasp-client.json
   "ports": [0, 0],
   "env": {
     "LASP_BRANCH": "$LASP_BRANCH",
-    "AD_COUNTER_SIM_CLIENT": "true",
+    "$SIM_CLIENT": "true",
     "DCOS": "$DCOS",
     "TOKEN": "$TOKEN",
     "EVALUATION_PASSPHRASE": "$EVALUATION_PASSPHRASE",
