@@ -281,13 +281,6 @@ configure_defaults() ->
                                         EventVelocityDefault),
     lasp_config:set(event_velocity, EventVelocity),
 
-    %% Peer service.
-    PeerService = application:get_env(plumtree,
-                                      peer_service,
-                                      partisan_peer_service),
-    PeerServiceManager = PeerService:manager(),
-    lasp_config:set(peer_service_manager, PeerServiceManager),
-
     %% Exchange mode.
     case Mode of
         delta_based ->
