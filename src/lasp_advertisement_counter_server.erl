@@ -297,6 +297,22 @@ compute_overcounting(AdList) ->
             MaxImpressions = lasp_config:get(max_events,
                                              ?MAX_EVENTS_DEFAULT),
             Overcounting = Value - MaxImpressions,
+            C = lasp_config:get(client_number, undefined),
+            Ts = lasp_config:get(aae_interval, undefined),
+            Tu = lasp_config:get(update_interval, undefined),
+            PeerService = lasp_config:get(peer_service_manager, undefined),
+            D = case PeerService of
+                partisan_hyparview_peer_service_manager ->
+                    math:log2(C + 1);
+                partisan_client_server_peer_service_manager ->
+                    2
+            end,
+            P = lasp_config:get(partition_probability, undefined),
+            U = Ts / Tu,
+            V = U * C * (D / (1 - P)),
+            lager:info("LALALA1 ~p", [PeerService]),
+            lager:info("LALALA2 | #C: ~p | Ts: ~p | Tu: ~p | D: ~p | P: ~p", [C, Ts, Tu, D, P]),
+            lager:info("LALALA2 | O : ~p | V = U * C * (D / (1 - P)) = ~p", [Overcounting, V]),
             OvercountingPercentage = (Overcounting * 100) / MaxImpressions,
             Acc + OvercountingPercentage
         end,

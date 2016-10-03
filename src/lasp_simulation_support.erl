@@ -1,4 +1,4 @@
-%% ------------------------------------------------------------------
+% ------------------------------------------------------------------
 %%
 %% Copyright (c) 2016 Christopher Meiklejohn.  All Rights Reserved.
 %%
@@ -130,7 +130,8 @@ start(_Case, _Config, Options) ->
                      end,
     lists:map(LoaderFun, Nodes),
 
-    SimulationsSyncInterval = 5000,
+    SimulationsSyncInterval = lasp_config:get(sync_interval, undefined),
+    SimulationsUpdateInterval = lasp_config:get(update_interval, undefined),
 
     %% Configure Lasp settings.
     ConfigureFun = fun(Node) ->
@@ -138,11 +139,16 @@ start(_Case, _Config, Options) ->
                         ok = rpc:call(Node, lasp_config, set,
                                       [extended_logging, true]),
 
+
+                        ok = rpc:call(Node, lasp_config, set,
+                                      [mailbox_logging, true]),
                         %% Configure timers.
                         ok = rpc:call(Node, lasp_config, set,
                                       [aae_interval, SimulationsSyncInterval]),
                         ok = rpc:call(Node, lasp_config, set,
                                       [delta_interval, SimulationsSyncInterval]),
+                        ok = rpc:call(Node, lasp_config, set,
+                                      [update_interval, SimulationsUpdateInterval]),
 
                         %% Configure plumtree AAE interval to be the same.
                         ok = rpc:call(Node, application, set_env,
@@ -156,7 +162,9 @@ start(_Case, _Config, Options) ->
                                 case Node of
                                     Server ->
                                         ok = rpc:call(Node, lasp_config, set,
-                                                      [ad_counter_simulation_server, true]);
+                                                      [ad_counter_simulation_server, true]),
+                                        ok = rpc:call(Node, lasp_config, set,
+                                                      [web_port, 8080]);
                                     _ ->
                                         ok = rpc:call(Node, lasp_config, set,
                                                       [ad_counter_simulation_client, true])
@@ -239,7 +247,7 @@ start(_Case, _Config, Options) ->
                                       [evaluation_identifier, list_to_atom(RealEvalIdentifier)]),
 
                         %% Configure max events number.
-                        MaxEvents = 10,
+                        MaxEvents = ClientNumber,
                         ok = rpc:call(Node, lasp_config, set,
                                       [max_events, MaxEvents]),
 

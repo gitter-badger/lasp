@@ -218,8 +218,9 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @private
 schedule_impression() ->
-    ImpressionVelocity = lasp_config:get(event_velocity, 1),
-    timer:send_after(round(?EVENT_INTERVAL / ImpressionVelocity), view).
+    %%EventVelocity = lasp_config:get(event_velocity, 1),
+    %%timer:send_after(round(?EVENT_INTERVAL / EventVelocity), view).
+    timer:send_after(lasp_config:get(update_interval, undefined), view).
 
 %% @private
 schedule_logging() ->

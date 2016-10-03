@@ -132,7 +132,7 @@
 
 -define(AAE_INTERVAL, 10000).
 -define(STATUS_INTERVAL, 10000).
--define(EVAL_NUMBER, 1).
+-define(EVAL_NUMBER, 3).
 -define(LOG_INTERVAL, 10000).
 -define(ADS_NUMBER, 1).
 
