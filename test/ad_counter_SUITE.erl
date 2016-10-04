@@ -51,6 +51,7 @@ end_per_suite(_Config) ->
     _Config.
 
 init_per_testcase(Case, _Config) ->
+    ct:timetrap(infinity),
     ct:pal("Beginning test case ~p", [Case]),
 
     _Config.
@@ -78,6 +79,7 @@ default_test(_Config) ->
 %% ===================================================================
 
 peer_to_peer_test(Config) ->
+    ct:timetrap(infinity),
     PP = [0],
     lists:foreach(
       fun(P) ->
@@ -87,6 +89,7 @@ peer_to_peer_test(Config) ->
     ).
 
 client_server_test(Config) ->
+    ct:timetrap(infinity),
     PP = [0],
     lists:foreach(
       fun(P) ->
