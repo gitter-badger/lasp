@@ -191,6 +191,7 @@ start(_Case, _Config, Options) ->
 
                         %% Configure the peer service.
                         PeerService = proplists:get_value(partisan_peer_service_manager, Options),
+                        lager:info("PPS1 ~p", [PeerService]),
                         ok = rpc:call(Node, partisan_config, set,
                                       [partisan_peer_service_manager, PeerService]),
 

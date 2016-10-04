@@ -1172,6 +1172,7 @@ log_transmission({Type, Payload}, PeerCount) ->
 
 %% @private
 schedule_aae_synchronization() ->
+    lager:info("PPS2 ~p", [lasp_config:peer_service_manager()]),
     ShouldAAESync = state_based_mode()
             andalso (not tutorial_mode())
             andalso (not broadcast_tree_mode())
