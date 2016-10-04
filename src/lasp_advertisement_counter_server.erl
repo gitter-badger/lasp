@@ -300,7 +300,7 @@ compute_overcounting(AdList) ->
             C = lasp_config:get(client_number, undefined),
             Ts = lasp_config:get(aae_interval, undefined),
             Tu = lasp_config:get(update_interval, undefined),
-            PeerService = lasp_config:get(peer_service_manager, undefined),
+            PeerService = lasp_config:peer_service_manager(),
             D = case PeerService of
                 partisan_hyparview_peer_service_manager ->
                     math:log2(C + 1);
