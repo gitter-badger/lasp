@@ -12,7 +12,6 @@ script:
   - make client-server-ad-counter-simulation
   - make peer-to-peer-game-tournament-simulation
   - make client-server-game-tournament-simulation
-  - make simple
 notifications:
   email: christopher.meiklejohn@gmail.com
   slack: lasp-lang:hiPRNnbUa3zdGrrXZfGRAF7D
