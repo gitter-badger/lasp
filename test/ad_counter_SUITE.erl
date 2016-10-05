@@ -63,7 +63,6 @@ end_per_testcase(Case, _Config) ->
 
 all() ->
     [
-     peer_to_peer_test,
      client_server_test
     ].
 
@@ -100,7 +99,7 @@ client_server_test(Config) ->
 
 
 run_it(Config, PeerService, PartitionProbability) ->
-    CList = [{4000, 4000}, {4000, 8000}, {8000, 4000}],
+    CList = [{4000, 8000}, {8000, 4000}],
     ClientList = [2, 4, 6, 8, 12, 16],
     lists:foreach(
         fun({UpdateInterval, SyncInterval}) ->

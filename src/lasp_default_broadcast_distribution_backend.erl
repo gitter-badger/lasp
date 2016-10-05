@@ -811,16 +811,19 @@ handle_cast({aae_send, From, {Id, Type, _Metadata, Value}},
                                ?CLOCK_INCR(Actor),
                                ?CLOCK_INIT(Actor)}),
 
+
+    lager:info("~n~n---------------------------ShouldREACTIVESERVER~p---------------------------~n", [reactive_server()]),
+
     %% Send back just the updated state for the object received.
     case client_server_mode() andalso i_am_server() andalso reactive_server() of
         true ->
-            lager:info("~n~n---------------------------~n ShouldREACT ~p ~n~n---------------------------~n", [true]),
+            lager:info("~n~n---------------------------ShouldREACT~p---------------------------~n", [true]),
             ObjectFilterFun = fun(Id1) ->
                                       Id =:= Id1
                               end,
             init_aae_sync(From, ObjectFilterFun, Store);
         false ->
-            lager:info("~n~n---------------------------~n ShouldREACT ~p ~n~n---------------------------~n", [false]),
+            lager:info("~n~n---------------------------ShouldREACT~p---------------------------~n", [false]),
             ok
     end,
 
@@ -1186,7 +1189,7 @@ schedule_aae_synchronization() ->
               )
             ),
 
-    lager:info("~n~n---------------------------~n ShouldAAESync ~p ~n~n---------------------------~n", [ShouldAAESync]),
+    lager:info("~n~n---------------------------ShouldAAESync ~p---------------------------~n", [ShouldAAESync]),
 
     case ShouldAAESync of
         true ->

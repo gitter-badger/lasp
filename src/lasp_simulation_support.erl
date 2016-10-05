@@ -150,6 +150,7 @@ start(_Case, _Config, Options) ->
                         ok = rpc:call(Node, lasp_config, set,
                                       [update_interval, SimulationsUpdateInterval]),
 
+
                         %% Configure plumtree AAE interval to be the same.
                         ok = rpc:call(Node, application, set_env,
                                       [plumtree, broadcast_exchange_timer, SimulationsSyncInterval]),
@@ -161,6 +162,8 @@ start(_Case, _Config, Options) ->
                             ad_counter ->
                                 case Node of
                                     Server ->
+                                        ok = rpc:call(Node, lasp_config, set,
+                                                      [reactive_server, true]),
                                         ok = rpc:call(Node, lasp_config, set,
                                                       [ad_counter_simulation_server, true]),
                                         ok = rpc:call(Node, lasp_config, set,
@@ -202,10 +205,6 @@ start(_Case, _Config, Options) ->
                         %% Configure where code should run.
                         HeavyClient = proplists:get_value(heavy_client, Options, false),
                         ok = rpc:call(Node, lasp_config, set, [heavy_client, HeavyClient]),
-
-                        %% Configure reactive server.
-                        ReactiveServer = proplists:get_value(reactive_server, Options, false),
-                        ok = rpc:call(Node, lasp_config, set, [reactive_server, ReactiveServer]),
 
                         %% Configure partitions.
                         PartitionProbability = proplists:get_value(partition_probability, Options, 0),

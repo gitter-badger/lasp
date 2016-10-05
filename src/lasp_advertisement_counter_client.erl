@@ -66,8 +66,10 @@ init([]) ->
     %% Build DAG.
     case lasp_config:get(heavy_client, false) of
         true ->
+            lager:info("~n~n---------------------------ShouldHEAVY ~p---------------------------~n", [true]),
             build_dag();
         false ->
+            lager:info("~n~n---------------------------ShouldHEAVY ~p---------------------------~n", [false]),
             ok
     end,
 
