@@ -63,6 +63,7 @@ end_per_testcase(Case, _Config) ->
 
 all() ->
     [
+     peer_to_peer_test,
      client_server_test
     ].
 
@@ -79,7 +80,7 @@ default_test(_Config) ->
 
 peer_to_peer_test(Config) ->
     ct:timetrap(infinity),
-    PP = [0],
+    PP = [20],
     lists:foreach(
       fun(P) ->
         run_it(Config, partisan_hyparview_peer_service_manager, P)
@@ -89,7 +90,7 @@ peer_to_peer_test(Config) ->
 
 client_server_test(Config) ->
     ct:timetrap(infinity),
-    PP = [0],
+    PP = [20],
     lists:foreach(
       fun(P) ->
         run_it(Config, partisan_client_server_peer_service_manager, P)
