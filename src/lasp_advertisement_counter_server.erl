@@ -307,7 +307,7 @@ compute_overcounting(AdList) ->
                 partisan_client_server_peer_service_manager ->
                     2
             end,
-            P = lasp_config:get(partition_probability, undefined),
+            P = lasp_config:get(partition_probability, undefined) / 100,
             U = Ts / Tu,
             V = U * C * (D / (1 - P)),
             lager:info("LALALA1 ~p", [PeerService]),
