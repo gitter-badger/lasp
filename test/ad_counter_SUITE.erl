@@ -99,7 +99,7 @@ client_server_test(Config) ->
 
 
 run_it(Config, PeerService, PartitionProbability) ->
-    CList = [{4000, 8000}, {8000, 4000}],
+    CList = [{4000, 4000}, {4000, 8000}, {8000, 4000}],
     ClientList = [2, 4, 6, 8, 12, 16],
     lists:foreach(
         fun({UpdateInterval, SyncInterval}) ->
@@ -116,7 +116,8 @@ run_it(Config, PeerService, PartitionProbability) ->
                          {partisan_peer_service_manager, PeerService},
                          {set, orset},
                          {broadcast, false},
-                         {heavy_client, true},
+                         {heavy_client, false},
+                         {reactive_server, false},
                          {partition_probability, PartitionProbability},
                          {evaluation_identifier, whatever}]
                     )

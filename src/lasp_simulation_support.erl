@@ -162,8 +162,9 @@ start(_Case, _Config, Options) ->
                             ad_counter ->
                                 case Node of
                                     Server ->
+                                        ReactiveServer = proplists:get_value(reactive_server, Options, false),
                                         ok = rpc:call(Node, lasp_config, set,
-                                                      [reactive_server, true]),
+                                                      [reactive_server, ReactiveServer]),
                                         ok = rpc:call(Node, lasp_config, set,
                                                       [ad_counter_simulation_server, true]),
                                         ok = rpc:call(Node, lasp_config, set,
