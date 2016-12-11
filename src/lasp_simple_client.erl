@@ -84,8 +84,7 @@ handle_info(event, #state{actor=Actor,
                           events=Events0}=State) ->
     lasp_marathon_simulations:log_message_queue_size("event"),
 
-    {ok, Value} = lasp:query(?SIMPLE_BAG),
-    TotalEvents = sets:size(Value),
+    {ok, TotalEvents} = lasp:query(?SIMPLE_BAG),
 
     LocalEvents = case TotalEvents > 0 of
         true ->
@@ -94,9 +93,8 @@ handle_info(event, #state{actor=Actor,
             %% Until then, clients are not allowed
             %% to add elements to the bag.
             Events1 = Events0 + 1,
-            Element = atom_to_list(Actor) ++ "###" ++ integer_to_list(Events1),
 
-            lasp:update(?SIMPLE_BAG, {add, Element}, Actor),
+            lasp:update(?SIMPLE_BAG, increment, Actor),
 
             lager:info("Events done: ~p, Events seen: ~p. Node: ~p", [Events1, TotalEvents + 1, Actor]),
 

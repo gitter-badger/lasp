@@ -74,7 +74,7 @@ init([]) ->
     %% element to the bag; clients don't
     %% add elements to the bag until
     %% they observe a non empty bag
-    lasp:update(?SIMPLE_BAG, {add, Actor}, Actor),
+    lasp:update(?SIMPLE_BAG, increment, Actor),
 
     {ok, #state{}}.
 
