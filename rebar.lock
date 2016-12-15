@@ -62,7 +62,7 @@
   0},
  {<<"types">>,
   {git,"https://github.com/lasp-lang/types.git",
-       {ref,"3305031b3277adca762b25ce61465b7e90003814"}},
+       {ref,"ccd8967b74314bc1ffb98a868b3a59aee678b821"}},
   0},
  {<<"webmachine">>,
   {git,"https://github.com/webmachine/webmachine.git",
